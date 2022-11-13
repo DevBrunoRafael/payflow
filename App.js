@@ -1,28 +1,28 @@
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Home from './src/screens/Home/Home'
-import Login from './src/screens/Login/Login'
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Provider } from "./src/context/dataContext";
 
-const Stack = createNativeStackNavigator()
+import Home from "./src/screens/Home/Home";
+import Signin from "./src/screens/Signin/Signin";
+import Signup from "./src/screens/signup/Signup";
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} />
-        {/* <Stack.Screen name="Home" component={Home} /> */}
-      </Stack.Navigator>
-    </NavigationContainer>
-  )
-}
+const Stack = createNativeStackNavigator();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-})
+const App = () => {
+   return (
+    // <Provider>
+      <NavigationContainer>
+         <Stack.Navigator>
+            <Stack.Screen name="Signin" component={Signin} />
+            <Stack.Screen name="Signup" component={Signup} />
+         </Stack.Navigator>
+      </NavigationContainer>
+    // </Provider>
+   );
+};
+
+export default () => (
+  <Provider>
+    <App />
+  </Provider>
+)
