@@ -1,28 +1,33 @@
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Provider } from "./src/context/dataContext";
 
-import Home from "./src/screens/Home/Home";
-import Signin from "./src/screens/Signin/Signin";
-import Signup from "./src/screens/signup/Signup";
+import Login from "./src/screens/Login";
+import Register from "./src/screens/Register";
+
+import { Provider } from "./src/context/authContext";
+
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
    return (
-    // <Provider>
       <NavigationContainer>
-         <Stack.Navigator>
-            <Stack.Screen name="Signin" component={Signin} />
-            <Stack.Screen name="Signup" component={Signup} />
+         <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
          </Stack.Navigator>
       </NavigationContainer>
-    // </Provider>
    );
 };
 
-export default () => (
-  <Provider>
-    <App />
-  </Provider>
-)
+export default () => {
+   return (
+      <Provider>
+         <SafeAreaProvider>
+            <App />
+         </SafeAreaProvider>
+      </Provider>
+   );
+};

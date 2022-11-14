@@ -1,20 +1,21 @@
-import React, { createContext, useReducer } from "react";
-import { Context } from "./dataContext";
+import React, { useReducer } from "react";
 
-export default ({ reducer, actions, initialState }) => {
-   const context = createContext();
+export default (reducer, actions, initialValue) => {
+   const Context = React.createContext();
 
    const Provider = ({ children }) => {
-      const [state, dispatch] = useReducer(reducer, initialState);
+      const [state, dispatch] = useReducer(reducer, initialValue);
 
-      const processFunctions = {};
-      Object.keys(actions).forEach((key) => processFunctions[key]) = actions[key](dispatch);
+      const customFunctions = {};
+      Object.keys(actions).forEach(
+         key => (customFunctions[key] = actions[key](dispatch))
+      );
 
       return (
-         <Context.Provider value={{ state, ...processFunctions }}>
+         <Context.Provider value={{ state, ...customFunctions }}>
             {children}
          </Context.Provider>
       );
    };
-   return { context, Provider };
+   return { Context, Provider };
 };
