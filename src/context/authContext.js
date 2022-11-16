@@ -1,4 +1,5 @@
 import createContext from "./createContext";
+import { api } from "../api";
 
 const initialState = {};
 
@@ -15,8 +16,16 @@ const teste = dispatch => {
    };
 };
 
+const registerUser = dispatch => {
+   return async (nome, email, password) => {
+      await api.post("/auth/register", {
+         nome, email, password
+      })
+   };
+};
+
 export const { Context, Provider } = createContext(
    reducer,
-   { teste },
+   { teste, registerUser },
    initialState
 );
