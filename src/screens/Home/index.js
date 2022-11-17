@@ -4,7 +4,7 @@ import React from 'react'
 const Home = () => {
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text style={styles.text}>E se o usuário não souber escrever?</Text>
     </View>
   )
 }
@@ -16,5 +16,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    
+  },
+  text: {
+    fontSize: 30
   }
 })

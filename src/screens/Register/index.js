@@ -2,21 +2,43 @@ import React, { useContext, useState } from "react";
 import { Context } from "../../context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Text, Button, TextInput } from "react-native-paper";
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import {
    Keyboard,
-   StatusBar,
    StyleSheet,
    TouchableWithoutFeedback,
    View,
+   Text,
+   TouchableOpacity,
+   TextInput,
 } from "react-native";
 
+import CustomStatusBar from "../../components/CustomStatusBar";
+
+const validateSchema = yup.object({
+   nome: yup.string().required("Informe seu nome..."),
+   email: yup.string().email("Email inválido").required("Informe seu email!"),
+   password: yup
+      .string()
+      .min(6, "Sua senha deve ter no minimo 6 characteres")
+      .required("Informe sua senha..."),
+});
 
 const Register = ({ navigation }) => {
-   const [nome, setNome] = useState("");
-   const [email, setEmail] = useState("");
-   const [password, setPassword] = useState("");
-   const [showPassword, setShowPassword] = useState(false);
+   const { registerUser } = useContext(Context);
+
+   const {
+      control,
+      handleSubmit,
+      formState: { errors },
+   } = useForm({ resolver: yupResolver(validateSchema) });
+
+   const register = ({ nome, email, password }) => {
+      console.log({ nome, email, password });
+   };
 
    return (
       <TouchableWithoutFeedback
@@ -24,82 +46,89 @@ const Register = ({ navigation }) => {
          touchSoundDisabled
       >
          <SafeAreaView style={styles.container}>
-            <StatusBar
-               barStyle="dark-content"
-               hidden={false}
-               backgroundColor="#FFF"
-               translucent={false}
-               networkActivityIndicatorVisible={true}
-            />
-            <View style={styles.textContainer}>
-               <Text style={styles.register}>Cadastro</Text>
-            </View>
-            <View style={styles.cardInputs}>
-               <TextInput
-                  style={styles.textInput}
-                  label="Nome"
-                  value={nome}
-                  mode={"outlined"}
-                  activeOutlineColor={"#FF941A"}
-                  onChangeText={text => setNome(text)}
-                  outlineColor={"#FFF"}
-                  left={
-                     <TextInput.Icon
-                        icon="account"
-                        size={25}
-                        iconColor="#FF941A"
+            <CustomStatusBar color={"#fff"} />
+
+            <Text style={styles.textHeader}>Cadastro</Text>
+
+            <View style={styles.containerInputs}>
+               <Controller
+                  control={control}
+                  name="nome"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                     <TextInput
+                        style={[
+                           styles.input,
+                           { borderColor: errors.password && "#ff375b" },
+                        ]}
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder={"Informe seu nome..."}
                      />
-                  }
+                  )}
                />
-               <TextInput
-                  style={styles.textInput}
-                  label="E-mail"
-                  value={email}
-                  mode={"outlined"}
-                  activeOutlineColor={"#FF941A"}
-                  onChangeText={text => setEmail(text)}
-                  outlineColor={"#FFF"}
-                  left={
-                     <TextInput.Icon icon="at" size={25} iconColor="#FF941A" />
-                  }
-               />
-               <TextInput
-                  style={styles.textInput}
-                  label="Senha"
-                  value={password}
-                  mode={"outlined"}
-                  activeOutlineColor={"#FF941A"}
-                  onChangeText={text => setPassword(text)}
-                  outlineColor={"#FFF"}
-                  left={
-                     <TextInput.Icon
-                        icon="lock"
-                        size={25}
-                        iconColor="#FF941A"
+               {errors.nome && (
+                  <Text style={styles.errorMessage}>
+                     {errors.nome?.message}
+                  </Text>
+               )}
+
+               <Controller
+                  control={control}
+                  name="email"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                     <TextInput
+                        style={[
+                           styles.input,
+                           { borderColor: errors.password && "#ff375b" },
+                        ]}
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder={"Informe seu email..."}
                      />
-                  }
-                  secureTextEntry={showPassword}
-                  right={
-                     showPassword ? (
-                        <TextInput.Icon
-                           icon="eye"
-                           size={25}
-                           iconColor="#FF941A"
-                           onPress={() => setShowPassword(!showPassword)}
-                        />
-                     ) : (
-                        <TextInput.Icon
-                           icon="eye-off"
-                           size={25}
-                           iconColor="#FF941A"
-                           onPress={() => setShowPassword(!showPassword)}
-                        />
-                     )
-                  }
+                  )}
                />
-               <Button mode="contained" style={styles.loginButton}>
-                  Cadastrar
-               </Button>
+               {errors.email && (
+                  <Text style={styles.errorMessage}>
+                     {errors.email?.message}
+                  </Text>
+               )}
+
+               <Controller
+                  control={control}
+                  name="password"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                     <TextInput
+                        style={[
+                           styles.input,
+                           { borderColor: errors.password && "#ff375b" },
+                        ]}
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder={"Informe sua senha..."}
+                     />
+                  )}
+               />
+               {errors.password && (
+                  <Text style={styles.errorMessage}>
+                     {errors.password?.message}
+                  </Text>
+               )}
+
+               <TouchableOpacity
+                  style={styles.button}
+                  onPress={
+                     handleSubmit(register)
+                     //    () => {
+                     //    registerUser(nome, email, password);
+                     //    navigation.navigate("Login");
+                     // }
+                  }
+               >
+                  <Text style={styles.buttonText}>CADASTRAR</Text>
+               </TouchableOpacity>
             </View>
          </SafeAreaView>
       </TouchableWithoutFeedback>
@@ -110,46 +139,47 @@ const styles = StyleSheet.create({
    container: {
       width: "100%",
    },
-   register: {
+   textHeader: {
       fontSize: 40,
-      fontWeight: "bold",
-      marginBottom: 0,
+      fontWeight: "700",
+      marginTop: 100,
+      marginBottom: 30,
+      marginLeft: 25,
    },
-   textContainer: {
-      marginBottom: 65,
-      marginTop: 175,
-      marginHorizontal: 30,
-   },
-   textInput: {
-      marginBottom: 5,
-      borderRadius: 5,
-   },
-   loginButton: {
-      paddingVertical: 4,
-      margin: 20,
+   containerInputs: {
       width: "100%",
-      alignSelf: "center",
-      borderRadius: 5,
-      backgroundColor: "#FF941A",
+      paddingHorizontal: 25,
    },
-   createAccountText: {
-      fontWeight: "bold",
-      color: "#FF941A",
+   input: {
+      borderWidth: 1,
+      borderRadius: 0,
+      borderColor: "#FF941A",
+      marginBottom: 15,
+      padding: 10,
+      fontSize: 20,
    },
-   cardImg: {
-      width: "100%",
-      height: "60%",
+   button: {
       justifyContent: "center",
       alignItems: "center",
-      marginBottom: 25,
+      backgroundColor: "#FF941A",
+      paddingVertical: 15,
+      borderRadius: 10,
+      marginBottom: 15,
+      marginTop: 10,
    },
-   img: {
-      width: "100%",
+   buttonText: {
+      fontWeight: "700",
+      fontSize: 16,
+      color: "#fff",
    },
-   cardInputs: {
-      marginTop: -50,
-      paddingHorizontal: 30,
+   redirectText: {
+      color: "#FF941A",
+      fontWeight: "bold",
+   },
+   errorMessage: {
+      alignSelf: "flex-start",
+      color: "#ff375b",
+      marginBottom: 8,
    },
 });
-
 export default Register;
