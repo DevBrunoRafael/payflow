@@ -18,7 +18,7 @@ const Routes = () => {
       );
    }
 
-   return signed ? <AppRoutes /> : <AppRoutes /> /* <AuthRoutes /> */;
+   return signed ? <AppRoutes /> : <AuthRoutes />;
 };
 
 const styles = StyleSheet.create({

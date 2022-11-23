@@ -38,6 +38,7 @@ const CreateBoleto = () => {
       control,
       handleSubmit,
       formState: { errors },
+      clearErrors
    } = useForm({ resolver: yupResolver(validateSchema) });
 
    const createBoleto = ({ nomeBoleto, vencimento, valor, codigo }) => {
@@ -135,7 +136,10 @@ const CreateBoleto = () => {
             <View style={styles.buttonGroup}>
                <TouchableOpacity
                   style={styles.button}
-                  onPress={() => navigation.navigate("Home")}
+                  onPress={() => {
+                     clearErrors()
+                     navigation.navigate("Home")
+                  }}
                >
                   <Text style={[styles.textButton, styles.cancel]}>
                      Cancelar

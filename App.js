@@ -7,7 +7,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import Routes from "./src/routes";
 
-/* screenOptions={{ headerShown: false } }*/
 const App = () => {
    return (
       <NavigationContainer>
@@ -21,13 +20,3 @@ const App = () => {
 };
 
 export default App;
-
-// export default () => {
-//    return (
-//       <AuthProvider>
-//          <SafeAreaProvider>
-//             <App />
-//          </SafeAreaProvider>
-//       </AuthProvider>
-//    );
-// };
