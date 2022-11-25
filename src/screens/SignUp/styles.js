@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   textHeader: {
      fontSize: 40,
      fontWeight: "700",
-     marginTop: 60,
+     marginTop: 18,
      marginBottom: 30,
      marginLeft: 25,
   },
@@ -27,10 +27,10 @@ export const styles = StyleSheet.create({
      justifyContent: "center",
      alignItems: "center",
      backgroundColor: "#FF941A",
-     paddingVertical: 15,
-     borderRadius: 10,
+     paddingVertical: 13,
+     borderRadius: 5,
      marginBottom: 15,
-     marginTop: 10,
+     marginTop: 18,
   },
   buttonText: {
      fontWeight: "700",

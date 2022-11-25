@@ -1,5 +1,6 @@
 import React from "react";
 import { styles } from "./styles";
+import { FontAwesome5, Entypo } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Controller, useForm } from "react-hook-form";
@@ -14,6 +15,8 @@ import {
    TouchableOpacity,
    TextInput,
 } from "react-native";
+
+import Input from "../../components/Input";
 
 import CustomStatusBar from "../../components/CustomStatusBar";
 import HeaderArrowNav from "../../components/HeaderArrowNav";
@@ -37,6 +40,10 @@ const SignUp = ({ navigation }) => {
       formState: { errors },
    } = useForm({ resolver: yupResolver(validateSchema) });
 
+   const handleSignUp = ({ nome, email, password }) => {
+      console.log({ nome, email, password });
+   };
+
    return (
       <TouchableWithoutFeedback
          onPress={() => Keyboard.dismiss()}
@@ -49,66 +56,40 @@ const SignUp = ({ navigation }) => {
             <Text style={styles.textHeader}>Cadastro</Text>
 
             <View style={styles.containerInputs}>
-               <Controller
+               <Input
                   control={control}
-                  name="nome"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                     <TextInput
-                        style={[
-                           styles.input,
-                           { borderColor: errors.password && "#ff375b" },
-                        ]}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        placeholder={"Informe seu nome..."}
-                     />
-                  )}
-               />
+                  nameInput="nome"
+                  placeholder={"Informe seu nome..."}
+               >
+                  <FontAwesome5 name="user-alt" size={20} color="#FF941A" />
+               </Input>
                {errors.nome && (
                   <Text style={styles.errorMessage}>
                      {errors.nome?.message}
                   </Text>
                )}
 
-               <Controller
+               <Input
                   control={control}
-                  name="email"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                     <TextInput
-                        style={[
-                           styles.input,
-                           { borderColor: errors.password && "#ff375b" },
-                        ]}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        placeholder={"Informe seu email..."}
-                     />
-                  )}
-               />
+                  nameInput="email"
+                  placeholder={"Informe seu email..."}
+               >
+                  <Entypo name="email" size={24} color="#FF941A" />
+               </Input>
                {errors.email && (
                   <Text style={styles.errorMessage}>
                      {errors.email?.message}
                   </Text>
                )}
 
-               <Controller
+               <Input
                   control={control}
-                  name="password"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                     <TextInput
-                        style={[
-                           styles.input,
-                           { borderColor: errors.password && "#ff375b" },
-                        ]}
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        placeholder={"Informe sua senha..."}
-                     />
-                  )}
-               />
+                  nameInput="password"
+                  placeholder={"Informe sua senha..."}
+                  secure={true}
+               >
+                  <FontAwesome5 name="lock" size={22} color="#FF941A" />
+               </Input>
                {errors.password && (
                   <Text style={styles.errorMessage}>
                      {errors.password?.message}
@@ -117,7 +98,7 @@ const SignUp = ({ navigation }) => {
 
                <TouchableOpacity
                   style={styles.button}
-                  // onPress={handleSubmit(function)}
+                  onPress={handleSubmit(handleSignUp)}
                >
                   <Text style={styles.buttonText}>CADASTRAR</Text>
                </TouchableOpacity>
