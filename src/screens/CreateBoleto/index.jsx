@@ -1,25 +1,24 @@
+import React from "react";
+import { styles } from "./styles";
+
 import {
    Keyboard,
-   StyleSheet,
    Text,
    TouchableOpacity,
    TouchableWithoutFeedback,
    View,
 } from "react-native";
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomStatusBar from "../../components/CustomStatusBar";
-import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
 import Input from "../../components/Input";
 
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import HeaderArrowNav from "../../components/HeaderArrowNav";
 
 const CreateBoleto = () => {
-   const navigation = useNavigation();
 
    const validateSchema = yup.object({
       nomeBoleto: yup.string().required("Informe o nome do boleto..."),
@@ -54,14 +53,7 @@ const CreateBoleto = () => {
             <CustomStatusBar color={"#fff"} />
             {/* envolve o conteúdo do formulário para contribuir com o posicionamento dos botões na parte inferior */}
             <View> 
-               <View style={styles.boxArrowleft}>
-                  <TouchableOpacity
-                     style={styles.arrowleft}
-                     onPress={() => navigation.navigate("Home")}
-                  >
-                     <AntDesign name="arrowleft" size={26} color="#B1B0B8" />
-                  </TouchableOpacity>
-               </View>
+               <HeaderArrowNav routeNavigate={"Home"} />
                <View style={styles.boxText}>
                   <Text style={styles.text}>
                      Preencha os dados{"\n"}do boleto
@@ -102,6 +94,7 @@ const CreateBoleto = () => {
                      control={control}
                      nameInput={"valor"}
                      placeholder={"Valor"}
+                     type={"numeric"}
                   >
                      <Ionicons
                         name="ios-wallet-outline"
@@ -161,90 +154,3 @@ const CreateBoleto = () => {
 };
 
 export default CreateBoleto;
-
-const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      justifyContent: "space-between",
-   },
-   boxArrowleft: {
-      width: "100%",
-      paddingTop: 15,
-      paddingBottom: 20,
-      paddingLeft: 15,
-   },
-   arrowleft: {
-      width: 40,
-      height: 40,
-      justifyContent: "center",
-      alignItems: "center",
-   },
-   boxText: {
-      alignItems: "center",
-      marginTop: 10,
-   },
-   text: {
-      fontSize: 25,
-      fontWeight: "700",
-      lineHeight: 25,
-      color: "#585666",
-      textAlign: "center",
-   },
-   cardInput: {
-      marginHorizontal: 25,
-      marginTop: 30,
-   },
-   boxInput: {
-      flexDirection: "row",
-      alignItems: "center",
-      borderBottomWidth: 1,
-      borderColor: "#E3E3E5",
-      marginBottom: 16,
-   },
-   inputArea: {
-      paddingLeft: 16,
-      paddingHorizontal: 16,
-      fontSize: 16,
-   },
-   boxIconInput: {
-      height: 59,
-      width: 59,
-      justifyContent: "center",
-      alignItems: "center",
-      borderColor: "#",
-      borderRightWidth: 1,
-      borderColor: "#E3E3E5",
-   },
-   buttonGroup: {
-      width: "100%",
-      flexDirection: "row",
-      marginTop: 20,
-      borderColor: "#E3E3E6",
-      borderTopWidth: 1,
-   },
-   button: {
-      flex: 1,
-      backgroundColor: "#fff",
-      alignItems: "center",
-      borderLeftWidth: 1,
-      borderRightWidth: 1,
-      borderColor: "#E3E3E6",
-      paddingHorizontal: 10,
-      paddingVertical: 15,
-   },
-   textButton: {
-      fontSize: 16,
-      fontWeight: "normal",
-   },
-   register: {
-      color: "#FF941A",
-   },
-   cancel: {
-      color: "#706E7A",
-   },
-   errorMessage: {
-      fontSize: 13,
-      color: "#ff375b",
-   },
-});
