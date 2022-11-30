@@ -5,13 +5,15 @@ import { AuthContext } from "../context/authContext";
 
 import AuthRoutes from "./auth-routes";
 import AppRoutes from "./app-routes";
+import { AppContext } from "../context/AppContext";
 
 const Routes = () => {
    const { signed, loading } = useContext(AuthContext);
+   const { loadingData } = useContext(AppContext);
 
-   if (loading) {
+   if (loading && loadingData) {
       return (
-        // react native splash screen 
+         // react native splash screen
          <View style={styles.container}>
             <ActivityIndicator color={"#777"} size={"large"} />
          </View>
