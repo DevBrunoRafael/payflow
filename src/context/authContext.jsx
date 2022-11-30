@@ -1,29 +1,31 @@
-import React, { createContext, useEffect, useState } from "react";
-import UserManagenment from "../services/UserManagenment";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import UserService from "../services/UserService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../api";
-import { useNavigation } from "@react-navigation/native";
+import { AppContext } from "./AppContext";
 
 const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
-   const [userId, setUserId] = useState("");
+   const { loadData, resetData } = useContext(AppContext);
+   const [nameUserAuthenticated, setNameUserAuthenticated] = useState("");
    const [loading, setLoading] = useState(true);
 
    useEffect(() => {
       const loadStorageData = async () => {
          const storageItems = await AsyncStorage.multiGet([
             "@PayflowAuth::token",
-            "@PayflowAuth::userId",
+            "@PayflowAuth::nameUser",
          ]);
 
          const storageToken = storageItems[0][1];
-         const storageUserId = storageItems[1][1];
+         const storageNameUser = storageItems[1][1];
 
-         if (storageUserId && storageToken) {
+         if (storageNameUser && storageToken) {
             api.defaults.headers["Authorization"] = `Bearer ${storageToken}`;
 
-            setUserId(storageUserId);
+            setNameUserAuthenticated(storageNameUser);
+            await loadData();
             setLoading(false);
          } else {
             setLoading(false);
@@ -34,30 +36,41 @@ const AuthProvider = ({ children }) => {
    }, []);
 
    const signIn = async (email, password) => {
-      const response = await UserManagenment.userSignin(email, password);
+      const data = await UserService.userSignin(email, password);
 
-      const { token, userId } = response;
+      if (data) {
+         const { token, nameUser } = data;
 
-      setUserId(userId);
+         
+         api.defaults.headers["Authorization"] = `Bearer ${token}`;
+         
+         await loadData();
 
-      api.defaults.headers["Authorization"] = `Bearer ${token}`;
+         setNameUserAuthenticated(nameUser);
 
-      await AsyncStorage.setItem("@PayflowAuth::token", token);
-      await AsyncStorage.setItem("@PayflowAuth::userId", userId);
+         await AsyncStorage.setItem("@PayflowAuth::token", token);
+         await AsyncStorage.setItem("@PayflowAuth::nameUser", nameUser);
+      }
+   };
+
+   const signUp = async (nome, email, password) => {
+      await UserService.userSignup(nome, email, password);
    };
 
    const signOut = async () => {
       await AsyncStorage.clear();
-      setUserId("");
+      resetData();
+      setNameUserAuthenticated("");
    };
 
    return (
       <AuthContext.Provider
          value={{
-            signed: userId.length === 0 ? false : true,
+            signed: nameUserAuthenticated.length === 0 ? false : true,
             signIn,
+            signUp,
             signOut,
-            userId,
+            nameUserAuthenticated,
             loading,
          }}
       >
