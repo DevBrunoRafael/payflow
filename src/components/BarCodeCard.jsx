@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 
-const BarCodeCard = () => {
+const BarCodeCard = ({ boletosQuantity }) => {
    return (
       <View style={styles.barCodeCard}>
          <View>
@@ -14,7 +14,9 @@ const BarCodeCard = () => {
          <View>
             <Text style={styles.barCodeCardText}>
                Você tem {}
-               <Text style={styles.boletosQuantity}>10 boletos</Text>
+               <Text style={styles.boletosQuantity}>
+                  {boletosQuantity} boletos
+               </Text>
                {"\n"} cadastrados para pagar
             </Text>
          </View>

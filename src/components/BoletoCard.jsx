@@ -1,16 +1,51 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ActionModal from "../components/ActionModal";
+import React, { useState, useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
-const BoletoCard = () => {
+const BoletoCard = ({ _id, nome, vencimento, valor, modalOn }) => {
+   const { markBoletoAsPaid, deleteBoleto } = useContext(AppContext);
+   const [modalVisibility, setModalVisibility] = useState(false);
+
+   if (vencimento) {
+      var dateConvert = vencimento.slice(0, 10).split("-").reverse().join("/");
+   }
+
    return (
-      <View style={styles.cardBoleto}>
-         <View>
-            <Text style={styles.name}>nome</Text>
-            <Text style={styles.date}>Vence em 00/00/000</Text>
-         </View>
-         <View>
-            <Text style={styles.value}>R$ 0,00</Text>
-         </View>
+      <View>
+         <TouchableOpacity
+            style={styles.cardBoleto}
+            onPress={() => setModalVisibility(true)}
+            activeOpacity={0.9}
+         >
+            <View style={styles.leftContent}>
+               <Text style={styles.name}>{nome}</Text>
+               <Text style={styles.date}>Vence em {dateConvert}</Text>
+            </View>
+            <View>
+               <Text style={styles.value}>R$ {valor}</Text>
+            </View>
+         </TouchableOpacity>
+
+         {modalOn && (
+            <Modal
+               visible={modalVisibility}
+               transparent={true}
+               onRequestClose={() => setModalVisibility(false)}
+               animationType={"fade"}
+            >
+               <ActionModal
+                  handleClose={() => setModalVisibility(false)}
+                  handleConfirm={() => {
+                     markBoletoAsPaid(_id);
+                     setModalVisibility(false);
+                  }}
+                  handleDelete={() => deleteBoleto(_id)}
+                  nome={nome}
+                  valor={valor}
+               />
+            </Modal>
+         )}
       </View>
    );
 };
@@ -22,7 +57,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       height: 50,
-      marginBottom: 30
+      marginBottom: 42,
    },
    value: {
       fontWeight: "500",
@@ -35,12 +70,12 @@ const styles = StyleSheet.create({
       fontSize: 18,
       lineHeight: 21,
       color: "#706E7A",
-      marginBottom: 6
+      marginBottom: 12,
    },
    date: {
-    fontWeight: "400",
-    fontSize: 13,
-    lineHeight: 16,
-    color: "#706E7A"
-   }
+      fontWeight: "400",
+      fontSize: 13,
+      lineHeight: 16,
+      color: "#706E7A",
+   },
 });

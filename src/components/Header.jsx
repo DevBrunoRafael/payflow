@@ -1,17 +1,23 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 
-const Header = () => {
+const Header = ({ logout }) => {
+   const { nameUserAuthenticated } = useContext(AuthContext);
+
    return (
       <View style={styles.header}>
          <View>
             <Text style={styles.salutation}>
-               Olá, <Text style={styles.username}>Bruno</Text>
+               Olá, <Text style={styles.username}>{nameUserAuthenticated}</Text>
             </Text>
             <Text style={styles.message}>mantenha suas contas em dia</Text>
          </View>
          <View>
-            <View style={styles.image}></View>
+            <TouchableOpacity
+               style={styles.image}
+               onPress={logout}
+            ></TouchableOpacity>
          </View>
       </View>
    );
