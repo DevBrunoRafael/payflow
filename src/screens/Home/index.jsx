@@ -1,20 +1,17 @@
 import React, { useContext } from "react";
 import { styles } from "./styles";
-
-import {
-   ScrollView,
-   Text,
-   View,
-} from "react-native";
+import { Text, View } from "react-native";
 import { AuthContext } from "../../context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomStatusBar from "../../components/CustomStatusBar";
 import BarCodeCard from "../../components/BarCodeCard";
 import Header from "../../components/Header";
-import BoletoCard from "../../components/BoletoCard";
+import List from "../../components/List";
+import { AppContext } from "../../context/AppContext";
 
 const Home = () => {
    const { signOut } = useContext(AuthContext);
+   const { boletos } = useContext(AppContext);
 
    const handleSignOut = () => {
       signOut();
@@ -28,25 +25,14 @@ const Home = () => {
          <View style={styles.multicolorBack}>
             <View style={styles.multicolorBackTop}></View>
             <View style={styles.multicolorBackBottom}></View>
-            <BarCodeCard />
+            <BarCodeCard boletosQuantity={boletos.length} />
          </View>
 
          <View style={styles.box}>
             <Text style={styles.boxText}>Meus Boletos</Text>
          </View>
 
-         <ScrollView style={styles.scrollView}>
-            <BoletoCard />
-            <BoletoCard />
-            <BoletoCard />
-            <BoletoCard />
-            <BoletoCard />
-            <BoletoCard />
-            <BoletoCard />
-            <BoletoCard />
-            <BoletoCard />
-            <BoletoCard />
-         </ScrollView>
+         <List data={boletos} modal={true} />
       </SafeAreaView>
    );
 };

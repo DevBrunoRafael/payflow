@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { styles } from "./styles";
 
 import {
@@ -11,14 +11,17 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomStatusBar from "../../components/CustomStatusBar";
 import { MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
-import Input from "../../components/Input";
+import CustomInput from "../../components/CustomInput";
 
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import HeaderArrowNav from "../../components/HeaderArrowNav";
+import { AppContext } from "../../context/AppContext";
+import FormErrorsMessage from "../../components/FormErrorsMessage";
 
-const CreateBoleto = () => {
+const CreateBoleto = ({ navigation }) => {
+   const { createBoleto } = useContext(AppContext);
 
    const validateSchema = yup.object({
       nomeBoleto: yup.string().required("Informe o nome do boleto..."),
@@ -30,18 +33,23 @@ const CreateBoleto = () => {
          .typeError("Digite apenas números...")
          .min(0, "Informe um valor válido...")
          .required("Informe o valor do boleto..."),
-      codigo: yup.string().required("Informe o codigo do boleto..."),
+      codigo: yup
+         .string()
+         .min(44, "Código de barras inválido.")
+         .required("Informe o codigo do boleto..."),
    });
 
    const {
       control,
       handleSubmit,
       formState: { errors },
-      clearErrors
+      clearErrors,
+      reset,
    } = useForm({ resolver: yupResolver(validateSchema) });
 
-   const createBoleto = ({ nomeBoleto, vencimento, valor, codigo }) => {
-      console.log({ nomeBoleto, vencimento, valor, codigo });
+   const register = async ({ nomeBoleto, vencimento, valor, codigo }) => {
+      createBoleto({ nomeBoleto, vencimento, valor, codigo });
+      reset();
    };
 
    return (
@@ -52,7 +60,7 @@ const CreateBoleto = () => {
          <SafeAreaView style={styles.container}>
             <CustomStatusBar color={"#fff"} />
             {/* envolve o conteúdo do formulário para contribuir com o posicionamento dos botões na parte inferior */}
-            <View> 
+            <View>
                <HeaderArrowNav routeNavigate={"Home"} />
                <View style={styles.boxText}>
                   <Text style={styles.text}>
@@ -60,7 +68,7 @@ const CreateBoleto = () => {
                   </Text>
                </View>
                <View style={styles.cardInput}>
-                  <Input
+                  <CustomInput
                      control={control}
                      nameInput={"nomeBoleto"}
                      placeholder={"Nome do boleto"}
@@ -70,27 +78,20 @@ const CreateBoleto = () => {
                         size={24}
                         color="#FF941A"
                      />
-                  </Input>
-                  {errors.nomeBoleto && (
-                     <Text style={styles.errorMessage}>
-                        {errors.nomeBoleto?.message}
-                     </Text>
-                  )}
+                  </CustomInput>
+                  <FormErrorsMessage error={errors.nomeBoleto} />
 
-                  <Input
+                  <CustomInput
                      control={control}
                      nameInput={"vencimento"}
                      placeholder={"Vencimento"}
                   >
                      <Feather name="x-circle" size={24} color="#FF941A" />
-                  </Input>
-                  {errors.vencimento && (
-                     <Text style={styles.errorMessage}>
-                        {errors.vencimento?.message}
-                     </Text>
-                  )}
+                  </CustomInput>
+                  <FormErrorsMessage error={errors.vencimento} />
 
-                  <Input
+
+                  <CustomInput
                      control={control}
                      nameInput={"valor"}
                      placeholder={"Valor"}
@@ -101,14 +102,10 @@ const CreateBoleto = () => {
                         size={24}
                         color="#FF941A"
                      />
-                  </Input>
-                  {errors.valor && (
-                     <Text style={styles.errorMessage}>
-                        {errors.valor?.message}
-                     </Text>
-                  )}
+                  </CustomInput>
+                  <FormErrorsMessage error={errors.valor} />
 
-                  <Input
+                  <CustomInput
                      control={control}
                      nameInput={"codigo"}
                      placeholder={"Código"}
@@ -118,20 +115,17 @@ const CreateBoleto = () => {
                         size={24}
                         color="#FF941A"
                      />
-                  </Input>
-                  {errors.codigo && (
-                     <Text style={styles.errorMessage}>
-                        {errors.codigo?.message}
-                     </Text>
-                  )}
+                  </CustomInput>
+                  <FormErrorsMessage error={errors.codigo} />
+
                </View>
             </View>
             <View style={styles.buttonGroup}>
                <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
-                     clearErrors()
-                     navigation.navigate("Home")
+                     clearErrors();
+                     navigation.navigate("Home");
                   }}
                >
                   <Text style={[styles.textButton, styles.cancel]}>
@@ -141,7 +135,7 @@ const CreateBoleto = () => {
 
                <TouchableOpacity
                   style={styles.button}
-                  onPress={handleSubmit(createBoleto)}
+                  onPress={handleSubmit(register)}
                >
                   <Text style={[styles.textButton, styles.register]}>
                      Cadastrar

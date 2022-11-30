@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { Entypo, FontAwesome5  } from "@expo/vector-icons";
+import { Entypo, FontAwesome5 } from "@expo/vector-icons";
 
 import {
    Keyboard,
@@ -15,11 +15,13 @@ import {
    TouchableWithoutFeedback,
    View,
    Text,
+   ActivityIndicator,
 } from "react-native";
 
 import CustomStatusBar from "../../components/CustomStatusBar";
-import Input from "../../components/Input";
+import CustomInput from "../../components/CustomInput";
 import { AuthContext } from "../../context/authContext";
+import FormErrorsMessage from "../../components/FormErrorsMessage";
 
 const SignIn = ({ navigation }) => {
    const validateSchema = yup.object({
@@ -56,37 +58,29 @@ const SignIn = ({ navigation }) => {
             <Text style={styles.textHeader}>Login</Text>
 
             <View style={styles.containerInputs}>
-               <Input
+               <CustomInput
                   control={control}
                   nameInput="email"
                   placeholder={"Informe seu email..."}
                >
                   <Entypo name="email" size={24} color="#FF941A" />
-               </Input>
-               {errors.email && (
-                  <Text style={styles.errorMessage}>
-                     {errors.email?.message}{" "}
-                  </Text>
-               )}
+               </CustomInput>
+               <FormErrorsMessage error={errors.email} />
 
-               <Input
+               <CustomInput
                   control={control}
                   nameInput="password"
                   placeholder={"Informe sua senha..."}
                   secure={true}
                >
                   <FontAwesome5 name="lock" size={22} color="#FF941A" />
-
-               </Input>
-               {errors.password && (
-                  <Text style={styles.errorMessage}>
-                     {errors.password?.message}
-                  </Text>
-               )}
+               </CustomInput>
+               <FormErrorsMessage error={errors.password} />
 
                <TouchableOpacity
                   style={styles.button}
                   onPress={handleSubmit(handleSignin)}
+                  activeOpacity={0.9}
                >
                   <Text style={styles.buttonText}>ENTRAR</Text>
                </TouchableOpacity>

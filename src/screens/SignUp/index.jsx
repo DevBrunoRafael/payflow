@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { styles } from "./styles";
 import { FontAwesome5, Entypo } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -13,13 +13,14 @@ import {
    View,
    Text,
    TouchableOpacity,
-   TextInput,
 } from "react-native";
 
-import Input from "../../components/Input";
-
+import CustomInput from "../../components/CustomInput";
+import FormErrorsMessage from "../../components/FormErrorsMessage";
 import CustomStatusBar from "../../components/CustomStatusBar";
 import HeaderArrowNav from "../../components/HeaderArrowNav";
+
+import { AuthContext } from "../../context/authContext";
 
 const SignUp = ({ navigation }) => {
    const validateSchema = yup.object({
@@ -40,8 +41,11 @@ const SignUp = ({ navigation }) => {
       formState: { errors },
    } = useForm({ resolver: yupResolver(validateSchema) });
 
+   const { signUp } = useContext(AuthContext);
+
    const handleSignUp = ({ nome, email, password }) => {
-      console.log({ nome, email, password });
+      signUp(nome, email, password);
+      navigation.navigate("SignIn");
    };
 
    return (
@@ -56,45 +60,33 @@ const SignUp = ({ navigation }) => {
             <Text style={styles.textHeader}>Cadastro</Text>
 
             <View style={styles.containerInputs}>
-               <Input
+               <CustomInput
                   control={control}
                   nameInput="nome"
                   placeholder={"Informe seu nome..."}
                >
                   <FontAwesome5 name="user-alt" size={20} color="#FF941A" />
-               </Input>
-               {errors.nome && (
-                  <Text style={styles.errorMessage}>
-                     {errors.nome?.message}
-                  </Text>
-               )}
+               </CustomInput>
+               <FormErrorsMessage error={errors.nome} />
 
-               <Input
+               <CustomInput
                   control={control}
                   nameInput="email"
                   placeholder={"Informe seu email..."}
                >
                   <Entypo name="email" size={24} color="#FF941A" />
-               </Input>
-               {errors.email && (
-                  <Text style={styles.errorMessage}>
-                     {errors.email?.message}
-                  </Text>
-               )}
+               </CustomInput>
+               <FormErrorsMessage error={errors.email} />
 
-               <Input
+               <CustomInput
                   control={control}
                   nameInput="password"
                   placeholder={"Informe sua senha..."}
                   secure={true}
                >
                   <FontAwesome5 name="lock" size={22} color="#FF941A" />
-               </Input>
-               {errors.password && (
-                  <Text style={styles.errorMessage}>
-                     {errors.password?.message}
-                  </Text>
-               )}
+               </CustomInput>
+               <FormErrorsMessage error={errors.password} />
 
                <TouchableOpacity
                   style={styles.button}
