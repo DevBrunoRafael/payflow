@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import Scanner from "./Scanner";
 import { useNavigation } from "@react-navigation/native";
 
-const HeaderArrowNav = ({ routeNavigate }) => {
+const HeaderArrowNav = ({ routeNavigate, right }) => {
+   const [modalVisibility, setModalVisibility] = useState(false);
    const navigation = useNavigation();
-   const route = routeNavigate;
+
    return (
       <View style={styles.boxArrowleft}>
          <TouchableOpacity
@@ -15,6 +17,37 @@ const HeaderArrowNav = ({ routeNavigate }) => {
          >
             <AntDesign name="arrowleft" size={26} color="#B1B0B8" />
          </TouchableOpacity>
+         {right && (
+            <TouchableOpacity
+               style={styles.arrowright}
+               onPress={() => setModalVisibility(true)}
+            >
+               <MaterialCommunityIcons
+                  name="barcode-scan"
+                  size={26}
+                  color="#B1B0B8"
+               />
+            </TouchableOpacity>
+         )}
+
+         <Modal
+            visible={modalVisibility}
+            transparent={true}
+            onRequestClose={() => setModalVisibility(false)}
+            animationType={"fade"}
+         >
+            <TouchableOpacity
+               style={styles.modal}
+               onPress={() => setModalVisibility(false)}
+            >
+               <View style={styles.spaceScann}>
+                  <Scanner
+                     handleClose={() => setModalVisibility(false)}
+                     setVisibility={() => setModalVisibility(false)}
+                  />
+               </View>
+            </TouchableOpacity>
+         </Modal>
       </View>
    );
 };
@@ -27,11 +60,29 @@ const styles = StyleSheet.create({
       paddingTop: 15,
       paddingBottom: 20,
       paddingLeft: 15,
+      paddingRight: 15,
+      justifyContent: "space-between",
+      flexDirection: "row",
    },
    arrowleft: {
       width: 40,
       height: 40,
       justifyContent: "center",
       alignItems: "center",
+   },
+   arrowright: {
+      width: 40,
+      height: 40,
+      justifyContent: "center",
+      alignItems: "center",
+   },
+   modal: {
+      flex: 1,
+      backgroundColor: "rgba(0,0,0,0.9)",
+      justifyContent: "center",
+      alignItems: "center",
+   },
+   spaceScann: {
+      width: 350,
    },
 });

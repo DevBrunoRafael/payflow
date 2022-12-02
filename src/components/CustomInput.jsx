@@ -1,9 +1,19 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import React from "react";
 
 import { Controller } from "react-hook-form";
+import { MaskedTextInput } from "react-native-mask-text";
 
-const CustomInput = ({ children, nameInput, control, placeholder, type, secure}) => {
+const CustomInput = ({
+   children,
+   nameInput,
+   control,
+   placeholder,
+   type,
+   secure,
+   mask,
+   maskType,
+}) => {
    return (
       <Controller
          control={control}
@@ -11,15 +21,26 @@ const CustomInput = ({ children, nameInput, control, placeholder, type, secure})
          render={({ field: { onChange, onBlur, value } }) => (
             <View style={styles.boxInput}>
                <View style={styles.boxIconInput}>{children}</View>
-               <TextInput
-                  style={styles.inputArea}
-                  placeholder={placeholder}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  keyboardType={type}
-                  secureTextEntry={secure}
-               />
+               {!mask ? (
+                  <TextInput
+                     style={styles.inputArea}
+                     placeholder={placeholder}
+                     value={value}
+                     onChangeText={onChange}
+                     onBlur={onBlur}
+                     keyboardType={type}
+                     secureTextEntry={secure}
+                  />
+               ) : (
+                  <MaskedTextInput
+                     mask={maskType}
+                     onChangeText={onChange}
+                     style={styles.inputArea}
+                     keyboardType={type}
+                     placeholder={placeholder}
+                     value={value}
+                  />
+               )}
             </View>
          )}
       />

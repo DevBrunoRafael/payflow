@@ -2,6 +2,7 @@ import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ActionModal from "../components/ActionModal";
 import React, { useState, useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import DeleteModal from "./DeleteModal";
 
 const BoletoCard = ({ _id, nome, vencimento, valor, modalOn }) => {
    const { markBoletoAsPaid, deleteBoleto } = useContext(AppContext);
@@ -26,14 +27,13 @@ const BoletoCard = ({ _id, nome, vencimento, valor, modalOn }) => {
                <Text style={styles.value}>R$ {valor}</Text>
             </View>
          </TouchableOpacity>
-
-         {modalOn && (
-            <Modal
-               visible={modalVisibility}
-               transparent={true}
-               onRequestClose={() => setModalVisibility(false)}
-               animationType={"fade"}
-            >
+         <Modal
+            visible={modalVisibility}
+            transparent={true}
+            onRequestClose={() => setModalVisibility(false)}
+            animationType={"fade"}
+         >
+            {modalOn ? (
                <ActionModal
                   handleClose={() => setModalVisibility(false)}
                   handleConfirm={() => {
@@ -44,8 +44,14 @@ const BoletoCard = ({ _id, nome, vencimento, valor, modalOn }) => {
                   nome={nome}
                   valor={valor}
                />
-            </Modal>
-         )}
+            ) : (
+               <DeleteModal
+                  handleClose={() => setModalVisibility(false)}
+                  handleDelete={() => deleteBoleto(_id)}
+                  nome={nome}
+               />
+            )}
+         </Modal>
       </View>
    );
 };

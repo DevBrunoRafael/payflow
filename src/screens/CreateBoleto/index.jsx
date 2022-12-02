@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { styles } from "./styles";
 
 import {
    Keyboard,
+   Modal,
    Text,
    TouchableOpacity,
    TouchableWithoutFeedback,
@@ -19,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import HeaderArrowNav from "../../components/HeaderArrowNav";
 import { AppContext } from "../../context/AppContext";
 import FormErrorsMessage from "../../components/FormErrorsMessage";
+import InputScanner from "../../components/InputScanner";
 
 const CreateBoleto = ({ navigation }) => {
    const { createBoleto } = useContext(AppContext);
@@ -32,11 +34,9 @@ const CreateBoleto = ({ navigation }) => {
          .number()
          .typeError("Digite apenas números...")
          .min(0, "Informe um valor válido...")
+         .max(99999, "Você não é tão rico assim meu caro...")
          .required("Informe o valor do boleto..."),
-      codigo: yup
-         .string()
-         .min(44, "Código de barras inválido.")
-         .required("Informe o codigo do boleto..."),
+      codigo: yup.string().min(0, "Código de barras inválido."),
    });
 
    const {
@@ -61,12 +61,14 @@ const CreateBoleto = ({ navigation }) => {
             <CustomStatusBar color={"#fff"} />
             {/* envolve o conteúdo do formulário para contribuir com o posicionamento dos botões na parte inferior */}
             <View>
-               <HeaderArrowNav routeNavigate={"Home"} />
+               <HeaderArrowNav routeNavigate={"Home"} right={true} />
+
                <View style={styles.boxText}>
                   <Text style={styles.text}>
                      Preencha os dados{"\n"}do boleto
                   </Text>
                </View>
+
                <View style={styles.cardInput}>
                   <CustomInput
                      control={control}
@@ -85,11 +87,12 @@ const CreateBoleto = ({ navigation }) => {
                      control={control}
                      nameInput={"vencimento"}
                      placeholder={"Vencimento"}
+                     mask={true}
+                     maskType={"99/99/9999"}
                   >
                      <Feather name="x-circle" size={24} color="#FF941A" />
                   </CustomInput>
                   <FormErrorsMessage error={errors.vencimento} />
-
 
                   <CustomInput
                      control={control}
@@ -105,19 +108,14 @@ const CreateBoleto = ({ navigation }) => {
                   </CustomInput>
                   <FormErrorsMessage error={errors.valor} />
 
-                  <CustomInput
-                     control={control}
-                     nameInput={"codigo"}
-                     placeholder={"Código"}
-                  >
+                  <InputScanner placeholder={"Código"}>
                      <MaterialCommunityIcons
                         name="barcode"
                         size={24}
                         color="#FF941A"
                      />
-                  </CustomInput>
-                  <FormErrorsMessage error={errors.codigo} />
-
+                  </InputScanner>
+                  {/* <FormErrorsMessage error={errors.codigo} /> */}
                </View>
             </View>
             <View style={styles.buttonGroup}>

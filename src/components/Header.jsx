@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useContext } from "react";
 import { AuthContext } from "../context/authContext";
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Header = ({ logout }) => {
    const { nameUserAuthenticated } = useContext(AuthContext);
@@ -17,7 +18,9 @@ const Header = ({ logout }) => {
             <TouchableOpacity
                style={styles.image}
                onPress={logout}
-            ></TouchableOpacity>
+            >
+               <MaterialIcons name="exit-to-app" size={40} color="white" />
+            </TouchableOpacity>
          </View>
       </View>
    );
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
    image: {
       height: 48,
       width: 48,
-      backgroundColor: "white",
+      backgroundColor: "#FF941A",
       borderRadius: 7,
    },
 });

@@ -25,7 +25,7 @@ const Home = () => {
          <View style={styles.multicolorBack}>
             <View style={styles.multicolorBackTop}></View>
             <View style={styles.multicolorBackBottom}></View>
-            <BarCodeCard boletosQuantity={boletos.length} />
+            <BarCodeCard boletosQuantity={boletos ? boletos.lenght : 0} />
          </View>
 
          <View style={styles.box}>

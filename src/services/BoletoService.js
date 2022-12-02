@@ -47,10 +47,11 @@ class BoletoService {
    }
 
    async registerBoleto({ nomeBoleto, vencimento, valor, codigo }) {
+      const dateVencimentoFormat = vencimento.split("/").reverse().join("-");
       try {
          const { data } = await api.post(`/boletos/`, {
             nomeBoleto,
-            vencimento,
+            vencimento: dateVencimentoFormat,
             valor,
             codigo,
          });

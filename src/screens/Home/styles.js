@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
      borderBottomWidth: 1,
      borderColor: "#E3E3E6",
      lineHeight: 25,
-     marginBottom: 32,
+     marginBottom: 20,
      marginHorizontal: 25,
   },
   boxText: {

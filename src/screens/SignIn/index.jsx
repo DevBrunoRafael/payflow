@@ -80,7 +80,7 @@ const SignIn = ({ navigation }) => {
                <TouchableOpacity
                   style={styles.button}
                   onPress={handleSubmit(handleSignin)}
-                  activeOpacity={0.9}
+                  activeOpacity={0.6}
                >
                   <Text style={styles.buttonText}>ENTRAR</Text>
                </TouchableOpacity>

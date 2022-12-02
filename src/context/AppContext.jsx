@@ -8,6 +8,8 @@ const AppProvider = ({ children }) => {
    const [boletosPaid, setBoletosPaid] = useState([]);
    const [loadingData, setLoadingData] = useState(true);
 
+   const [codeScanned, setCodeScanned] = useState({});
+
    const loadData = async () => {
       const listBoletos = await BoletoService.listAllBoletos();
       setBoletos(listBoletos);
@@ -23,13 +25,14 @@ const AppProvider = ({ children }) => {
       setBoletosPaid([]);
    };
 
-   const createBoleto = async ({ nomeBoleto, vencimento, valor, codigo }) => {
+   const createBoleto = async ({ nomeBoleto, vencimento, valor }) => {
       await BoletoService.registerBoleto({
          nomeBoleto,
          vencimento,
          valor,
-         codigo,
+         codigo: codeScanned.data
       });
+      setCodeScanned({});
       await loadData();
    };
 
@@ -54,6 +57,8 @@ const AppProvider = ({ children }) => {
             createBoleto,
             markBoletoAsPaid,
             deleteBoleto,
+            codeScanned,
+            setCodeScanned,
          }}
       >
          {children}

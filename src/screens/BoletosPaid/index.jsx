@@ -16,7 +16,7 @@ const BoletoPaid = () => {
          <View style={styles.box}>
             <Text style={styles.boxText}>Meus Extratos</Text>
             <Text style={styles.boletosQuantity}>
-               {boletosPaid.length} Pagos
+               {boletosPaid ? boletosPaid.lenght : 0} Pagos
             </Text>
          </View>
 

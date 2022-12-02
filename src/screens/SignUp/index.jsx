@@ -91,6 +91,7 @@ const SignUp = ({ navigation }) => {
                <TouchableOpacity
                   style={styles.button}
                   onPress={handleSubmit(handleSignUp)}
+                  activeOpacity={0.6}
                >
                   <Text style={styles.buttonText}>CADASTRAR</Text>
                </TouchableOpacity>
