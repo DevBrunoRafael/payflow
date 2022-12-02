@@ -26,24 +26,27 @@ const AppProvider = ({ children }) => {
    };
 
    const createBoleto = async ({ nomeBoleto, vencimento, valor }) => {
+      const codigo = codeScanned.data;
+
+      setCodeScanned({});
+
       await BoletoService.registerBoleto({
          nomeBoleto,
          vencimento,
          valor,
-         codigo: codeScanned.data
+         codigo,
       });
-      setCodeScanned({});
-      await loadData();
+      loadData();
    };
 
-   const markBoletoAsPaid = async id => {
-      await BoletoService.markAsPaid(id);
-      await loadData();
+   const markBoletoAsPaid = id => {
+      BoletoService.markAsPaid(id);
+      loadData();
    };
 
-   const deleteBoleto = async id => {
-      await BoletoService.deleteBoleto(id);
-      await loadData();
+   const deleteBoleto = id => {
+      BoletoService.deleteBoleto(id);
+      loadData();
    };
 
    return (

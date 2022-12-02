@@ -51,7 +51,16 @@ export default function Scanner({ navigation, handleClose, setVisibility }) {
                alignItems: "center",
             }}
          >
-            <Text style={{ fontSize: 25, fontWeight: "700", color: "#fff" }}>Posicione o código de barras</Text>
+            <Text
+               style={{
+                  fontSize: 25,
+                  fontWeight: "700",
+                  color: "#fff",
+                  marginTop: -35,
+               }}
+            >
+               Posicione o código de barras
+            </Text>
          </View>
       </View>
    );
